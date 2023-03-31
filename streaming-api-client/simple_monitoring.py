@@ -35,15 +35,15 @@ def on_message(ws, message):
     print("Timestamp in Epoch: %s" % str(stream_data.timestamp))
     print("Customer_ID: %s" % str(stream_data.customer_id))
     # Based on the topic import compiled proto file and decode 'data' field
-    from proto import location_pb2
-    location_data = location_pb2.stream_location()
-    location_data.ParseFromString(stream_data.data)
+    from proto import monitoring_pb2
+    monitoring_data = monitoring_pb2.MonitoringInformation()
+    monitoring_data.ParseFromString(stream_data.data)
 
-    print(location_data)
+    print(monitoring_data)
+    print('##### #####')
     json_loc_data = json_format.MessageToDict(
-        location_data, preserving_proto_field_name=True
+        monitoring_data, preserving_proto_field_name=True
     )
-
     print(json_loc_data)
 
 
@@ -70,10 +70,10 @@ if __name__ == "__main__":
     # Central User email
     header["UserName"] = "support@lonerooftop.com"
     # WebSocket Key from Streaming API Page
-    header["Authorization"] = ""  # TODO: fill in this
+    header["Authorization"] = "eyJhbGciOiJIUzI1NiIsInR5cGUiOiJqd3QifQ.eyJjdXN0b21lcl9pZCI6ImJiNTJlNTk4YmU5MzExZWQ4MDViNWE3MzQ0YjA2NDk0IiwiY3JlYXRpb25fZGF0ZSI6MTY3ODg4MDg1N30.Zt0ryyfk0ZDkeMwxyMCIFomR5brZmNN9aWgBKxFUdXc" # noqa
     # Subscription TOPIC for Streaming API
     # (audit|apprf|location|monitoring|presence|security)
-    header["Topic"] = "location"
+    header["Topic"] = "monitoring"
     # Create WebSocket connection
     websocket.enableTrace(True)
     ws = websocket.WebSocketApp(url=url,
